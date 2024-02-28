@@ -5,8 +5,38 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
+		<style>
+			svg { width: 100%; max-width: 960px; height: auto; }
+			.region { fill: #cccccc; stroke: #000000; stroke-width: 1; }
+			.region:hover { fill: #aaaaaa; }
+			text { font-family: Arial, sans-serif; font-size: 14px; fill: #000000; }
+		</style>
 	</head>
 	<body data-sveltekit-preload-data="hover">
+		<svg viewBox="0 0 960 600">
+			<!-- South Region -->
+			<path id="south" class="region" d="M300,300 L400,250 L500,300 L500,400 L400,450 L300,400 Z" data-name="South Region" />
+			<!-- West Region -->
+			<path id="west" class="region" d="M100,100 L300,150 L300,300 L200,350 L100,300 Z" data-name="West Region" />
+			<!-- Northeast Region -->
+			<path id="northeast" class="region" d="M700,100 L800,50 L900,100 L800,150 Z" data-name="Northeast Region" />
+			<!-- Midwest Region -->
+			<path id="midwest" class="region" d="M500,200 L700,150 L800,200 L700,250 Z" data-name="Midwest Region" />
+			
+			<!-- Labels -->
+			<text x="350" y="375" text-anchor="middle">South</text>
+			<text x="200" y="175" text-anchor="middle">West</text>
+			<text x="800" y="125" text-anchor="middle">Northeast</text>
+			<text x="650" y="225" text-anchor="middle">Midwest</text>
+		</svg>
+		
+		<script>
+			document.querySelectorAll('.region').forEach(item => {
+				item.addEventListener('click', function() {
+					alert(`Region: ${this.getAttribute('data-name')}`);
+				});
+			});
+		</script>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>

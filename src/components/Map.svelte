@@ -1,11 +1,9 @@
 <script>
   import mapboxgl from "mapbox-gl";
   import { onMount } from "svelte";
-  export let index;
-  export let geoJsonToFit;
 
   mapboxgl.accessToken =
-    "pk.eyJ1IjoieWl5MTU5IiwiYSI6ImNsc29kajJ5YjBhdmgya3BpNnI3bmFlczcifQ.o9opVXMQKSJqoBcMDsaJ9w";
+    "YOUR_TOKEN_HERE";
 
   let container;
   let map;
@@ -48,33 +46,26 @@
       }
     }
 
-    map.on("load", () => {
-      hideLabelLayers();
-      updateBounds();
-      map.on("zoom", updateBounds);
-      map.on("drag", updateBounds);
-      map.on("move", updateBounds);
-    });
+    // map.on("load", () => {
+    //   hideLabelLayers();
+    //   updateBounds();
+    //   map.on("zoom", updateBounds);
+    //   map.on("drag", updateBounds);
+    //   map.on("move", updateBounds);
+    // });
   });
   
-  function updateBounds() {
-    const bounds = map.getBounds();
-    geoJsonToFit.features[0].geometry.coordinates = [
-      bounds._ne.lng,
-      bounds._ne.lat,
-    ];
-    geoJsonToFit.features[1].geometry.coordinates = [
-      bounds._sw.lng,
-      bounds._sw.lat,
-    ];
-  }
-  let isVisible = false;
-
-  $: if (index === 2) {
-    isVisible = true;
-  } else {
-    isVisible = false;
-  }
+  // function updateBounds() {
+  //   const bounds = map.getBounds();
+  //   geoJsonToFit.features[0].geometry.coordinates = [
+  //     bounds._ne.lng,
+  //     bounds._ne.lat,
+  //   ];
+  //   geoJsonToFit.features[1].geometry.coordinates = [
+  //     bounds._sw.lng,
+  //     bounds._sw.lat,
+  //   ];
+  // }
 </script>
 
 <svelte:head>
@@ -84,15 +75,15 @@
   />
 </svelte:head>
 
-<div class="map" class:visible={isVisible} bind:this={container} />
+<div class="map" bind:this={container} />
 
 <style>
   .map {
     width: 100%;
     height: 100vh; /* check problem when setting width */
     position: absolute;
-    opacity: 0;
-    visibility: hidden;
+    opacity: 1;
+    visibility: visible;
     transition: opacity 2s, visibility 2s;
     outline: blue solid 3px;
   }
