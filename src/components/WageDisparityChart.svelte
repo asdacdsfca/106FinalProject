@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
-    // Import your actual charting library here
-    
+    import Chart from 'chart.js/auto';
+
     let chart;
 
     onMount(() => {

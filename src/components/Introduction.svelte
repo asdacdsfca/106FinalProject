@@ -1,7 +1,7 @@
 <!-- src/components/Introduction.svelte -->
 <script>
     // Any JavaScript needed for the component
-  </script>
+</script>
   
   <div class="introduction">
     <h1>Understanding Wage Disparities</h1>
