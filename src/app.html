@@ -5,6 +5,7 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
+		<link rel="stylesheet" href="/style.css">
 		<style>
 			svg { width: 100%; max-width: 960px; height: auto; }
 			.region { stroke: #000000; stroke-width: 1; }
@@ -13,6 +14,10 @@
 		</style>
 	</head>
 	<body data-sveltekit-preload-data="hover">
+				
+	<div style="display: contents">%sveltekit.body%</div>
+	<script src="script.js"></script>
+	<div class="map-container">
 		<svg viewBox="0 0 960 600">
 			<!-- South Region -->
 			<g id="south" name="South" class="region" data-name="South Region" fill="#d30000">
@@ -96,14 +101,12 @@
 
 			<!-- Dividing Line -->			
 			<path d="M 211,493 V 548 L 247,593 M 0,425 H 144 L 211,493 H 297 L 350,547 V 593" stroke="#a9a9a9" fill="none" stroke-width="2"/>				
-			</svg>
-		
+		</svg>
+
 		<script>
-			document.querySelectorAll('.region').forEach(item => {
-				item.addEventListener('click', function() {
-					alert(`Region: ${this.getAttribute('data-name')}`);
-				});
-			});
+		document.querySelectorAll('.region').forEach(item => {
+			item.addEventListener('click', function() {
+				alert(`Region: ${this.getAttribute('data-name')}`)})});
 		</script>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
