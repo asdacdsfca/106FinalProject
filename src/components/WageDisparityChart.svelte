@@ -27,8 +27,7 @@
             }]
         };
 
-        // Initialize your chart here using the selected library
-        // For example: chart = new ChartJS(container, { type: 'bar', data: data });
+        chart = new ChartJS(container, { type: 'bar', data: data });
     });
 </script>
 
