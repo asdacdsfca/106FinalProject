@@ -27,13 +27,13 @@
             }]
         };
 
-        chart = new ChartJS(container, { type: 'bar', data: data });
+        chart = new Chart(document.getElementById('wageDisparityChart'), { type: 'bar', data: data });
     });
 </script>
 
 <div class="chart-container">
     <h2>Wage Disparity Chart</h2>
-    <p>(Chart would go here)</p>
+    <canvas id="wageDisparityChart"></canvas>
   </div>
   
 <style>
