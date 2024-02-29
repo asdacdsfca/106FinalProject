@@ -31,6 +31,7 @@ declare module '$env/static/private' {
 	export const INIT_CWD: string;
 	export const SHELL: string;
 	export const TERM: string;
+	export const npm_config_open: string;
 	export const TMPDIR: string;
 	export const npm_config_global_prefix: string;
 	export const CONDA_SHLVL: string;
@@ -111,6 +112,7 @@ declare module '$env/dynamic/private' {
 		INIT_CWD: string;
 		SHELL: string;
 		TERM: string;
+		npm_config_open: string;
 		TMPDIR: string;
 		npm_config_global_prefix: string;
 		CONDA_SHLVL: string;
