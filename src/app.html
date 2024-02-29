@@ -14,6 +14,31 @@
 		</style>
 	</head>
 	<body data-sveltekit-preload-data="hover">
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="utf-8" />
+			<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+			<meta name="viewport" content="width=device-width" />
+			%sveltekit.head%
+			<link rel="stylesheet" href="/style.css">
+			<style>
+				svg { width: 100%; max-width: 960px; height: auto; }
+				.region { stroke: #000000; stroke-width: 1; }
+				.region:hover { fill: #aaaaaa; }
+				text { font-family: Arial, sans-serif; font-size: 14px; fill: #000000; }
+				.intro { padding: 20px; font-family: Arial, sans-serif; }
+				.intro h2 { color: #333; }
+				.intro p { color: #666; }
+			</style>
+		</head>
+		<body data-sveltekit-preload-data="hover">
+			
+	<div class="intro">
+		<h2>Understanding Wage Disparities: An Essential Inquiry</h2>
+		<p><strong>Why Does It Matter?</strong><br>In a world that strives for fairness and equality...</p>
+		<!-- More content here -->
+	</div>
 				
 	<div style="display: contents">%sveltekit.body%</div>
 	<script src="script.js"></script>
@@ -111,3 +136,5 @@
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
+
+
