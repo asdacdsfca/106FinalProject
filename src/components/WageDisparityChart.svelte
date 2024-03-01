@@ -8,7 +8,7 @@
     let averageEducByRace = {};
 
     onMount(async () => {
-        const response = await fetch('data.json');
+        const response = await fetch('../data.json');
         jsonData = await response.json();
         if(jsonData) {
             filteredData = jsonData.filter(d => d.REGION === "SOUTH REGION");
