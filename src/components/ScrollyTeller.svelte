@@ -1,11 +1,7 @@
 <script>
   import Scroller from "@sveltejs/svelte-scroller";
   import Introduction from "./Introduction.svelte";
-
   let count, index, offset, progress;
-  let showIntroduction = false;
-
-  $: showIntroduction = (index === 1); // Assuming you want to show the intro at the first index
 </script>
 <Scroller bind:count bind:index bind:offset bind:progress>
   <div class="background" slot="background">
@@ -22,29 +18,15 @@
   </div>
 
   <div class="foreground" slot="foreground">
-    <section>This is the first section.</section>
-    <Introduction show={showIntroduction} />
+    <section>
+      <Introduction />
+    </section>
     <section>This is the second section.</section>
     <section>This is the third section.</section>
   </div>
 
 </Scroller>
 <style>
-  /* .background {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    outline: green solid 3px;
-  } */
-
-  /* .foreground {
-    width: 50%;
-    margin: 0 auto;
-    height: auto;
-    position: relative;
-    outline: red solid 3px;
-  } */
-
   .progress-bars {
     position: absolute;
     background: rgba(170, 51, 120, 0.2) /*  40% opaque */;
@@ -60,6 +42,6 @@
     max-width: 750px; /* adjust at will */
     color: black;
     padding: 1em;
-    margin: 0 0 2em 0;
+    margin: 0 0 4em 0;
   }
 </style>
