@@ -1,10 +1,11 @@
-<!-- src/components/Introduction.svelte -->
 <script>
-    // Any JavaScript needed for the component
+    import { fade } from 'svelte/transition';
+    export let show = false; // This prop determines if the introduction should be visible
 </script>
-  
-  <div class="introduction">
+
+<div class="introduction" in:fade={{ duration: 1000 }} out:fade={{ duration: 1000 }} class:visible={show}>
     <h1>Understanding Wage Disparities</h1>
+    <h1 in:fade={{ duration: 3000 }}>Understanding Wage Disparities</h1>
     <p>Wage disparity is a critical issue that affects economic equity and social justice worldwide. Through our visualizations, we aim to explore the various dimensions of wage gaps, understand their implications, and discuss potential solutions.</p>
     <p>Consider the following questions as you navigate the data:</p>
     <ul>
@@ -13,8 +14,7 @@
       <li>What policy measures could address these disparities effectively?</li>
     </ul>
   </div>
-  
-  <style>
+   <style>
     .introduction {
       padding: 20px;
       background-color: #f3f3f3;
@@ -29,5 +29,14 @@
       color: #666;
       line-height: 1.6;
     }
+    .introduction {
+    transition: opacity 1s ease;
+    opacity: 0;
+    }
+    .introduction.visible {
+        opacity: 1;
+    }
   </style>
-  
+ 
+ 
+ 
