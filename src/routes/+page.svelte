@@ -8,5 +8,4 @@
     <ScrollyTeller />
     <Introduction/>
     <WageDisparityChart/>
-    
 </main>

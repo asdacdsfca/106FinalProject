@@ -1,6 +1,8 @@
 <script>
   import Scroller from "@sveltejs/svelte-scroller";
   import Introduction from "./Introduction.svelte";
+  import Graph from "./Graph.svelte";
+  import Income from "./Income.svelte";
   let count, index, offset, progress;
 </script>
 <Scroller bind:count bind:index bind:offset bind:progress>
@@ -21,8 +23,13 @@
     <section>
       <Introduction />
     </section>
-    <section>This is the second section.</section>
-    <section>This is the third section.</section>
+
+    <section>
+      <Graph />
+    </section>
+    <section>
+      <Income />
+    </section>
   </div>
 
 </Scroller>
@@ -34,14 +41,19 @@
   }
 
   section {
-    height: 80vh;
-    background-color: rgba(255, 255, 255, 0.2); /* 20% opaque */
-    /* color: white; */
-    outline: rgb(255, 255, 255) solid 3px;
-    text-align: center;
-    max-width: 750px; /* adjust at will */
-    color: black;
-    padding: 1em;
-    margin: 0 0 4em 0;
-  }
+  display: flex; /* Enables Flexbox layout within the section */
+  flex-direction: column; /* Stacks flex items vertically */
+  justify-content: center; /* Centers flex items vertically within the container */
+  align-items: center; /* Centers flex items horizontally within the container */
+  min-height: 80vh; /* Ensures that the section is at least 80% of the viewport height */
+  background-color: rgba(255, 255, 255, 0.2); /* 20% opaque */
+  outline: rgb(255, 255, 255) solid 3px;
+  text-align: center;
+  width: 90%; /* Allows the section to take up more of the width of the page, up to 90% */
+  max-width: none; /* Removes the maximum width restriction */
+  color: black;
+  padding: 1em;
+  margin: auto; /* Centers the section horizontally */
+}
+
 </style>
