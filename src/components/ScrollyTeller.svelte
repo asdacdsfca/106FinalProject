@@ -3,6 +3,7 @@
   import Introduction from "./Introduction.svelte";
   import Graph from "./Graph.svelte";
   import Income from "./Income.svelte";
+  import USMap from "./USMap.svelte";
   let count, index, offset, progress;
 </script>
 <Scroller bind:count bind:index bind:offset bind:progress>
@@ -28,7 +29,10 @@
       <Graph />
     </section>
     <section>
-      <Income />
+      <Income {index} />
+    </section>
+    <section>
+      <USMap />
     </section>
   </div>
 

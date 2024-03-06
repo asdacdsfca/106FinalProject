@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
     import { base } from '$app/paths';
+    export let index;
   
     let jsonData;
     let averageIncomeByRace = {};
@@ -149,23 +150,38 @@
                 .attr("dy", "0.32em")
                 .text(d => d.race);
     }
+    let isVisible = false;
+
+    $: if (index === 2) {
+        isVisible = true;
+    } else {
+        isVisible = false;
+    }
   </script>
   
   <svelte:head>
       <title>Wage Disparity Chart</title>
   </svelte:head>
   
-  <div class="chart-container">
+  <div class="chart-container" class:visible={isVisible}>
       <h2 class="chart-title">Wage Disparity Chart</h2>
       <svg id="raceIncomeChart" width="960" height="600"></svg>
   </div>
   
   <style>
-    .tooltip {
-    font-size: 12px;
-    z-index: 10; /* Make sure this is high enough to be above the chart elements */
-    position: absolute; /* Positioning must be absolute or fixed for z-index to have an effect */
-  }
+    .chart-container{
+        width: 100%;
+        height: 100vh; /* check problem when setting width */
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 2s, visibility 2s;
+        /* outline: blue solid 3px; */
+    }
+    .chart-container.visible {
+        opacity: 1;
+        visibility: visible;
+    }
   </style>
   
   
