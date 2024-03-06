@@ -32,7 +32,7 @@
       <Income {index} />
     </section>
     <section>
-      <USMap />
+      <USMap {index} />
     </section>
   </div>
 
