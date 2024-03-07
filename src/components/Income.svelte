@@ -6,27 +6,52 @@
   
     let jsonData;
     let averageIncomeByRace = {};
+    let svg, g;
   
     onMount(async () => {
-        const response = await fetch(`${base}/data.json`);
-        jsonData = await response.json();
-        if (jsonData) {
-            jsonData.forEach(item => {
-                if (averageIncomeByRace[item.RACE]) {
-                    averageIncomeByRace[item.RACE].total += parseInt(item.HOURWAGE);
-                    averageIncomeByRace[item.RACE].count += 1;
-                } else {
-                    averageIncomeByRace[item.RACE] = { total: parseInt(item.HOURWAGE), count: 1 };
-                }
-            });
-  
-            for (let race in averageIncomeByRace) {
-                averageIncomeByRace[race] = averageIncomeByRace[race].total / averageIncomeByRace[race].count;
-            }
-  
-            createChart();
-        }
-    });
+      const response = await fetch(`${base}/data.json`);
+      jsonData = await response.json();
+      if (jsonData) {
+          jsonData.forEach(item => {
+              if (averageIncomeByRace[item.RACE]) {
+                  averageIncomeByRace[item.RACE].total += parseInt(item.HOURWAGE);
+                  averageIncomeByRace[item.RACE].count += 1;
+              } else {
+                  averageIncomeByRace[item.RACE] = { total: parseInt(item.HOURWAGE), count: 1 };
+              }
+          });
+
+          for (let race in averageIncomeByRace) {
+              averageIncomeByRace[race] = averageIncomeByRace[race].total / averageIncomeByRace[race].count;
+          }
+
+          createChart();
+      }
+  });
+
+    function showHistPart() {
+    // switch the axis to histogram one
+    showAxis(xAxisHist);
+
+    g.selectAll('.bar-text')
+      .transition()
+      .duration(0)
+      .attr('opacity', 0);
+
+    g.selectAll('.bar')
+      .transition()
+      .duration(600)
+      .attr('width', 0);
+
+    // here we only show a bar if
+    // it is before the 15 minute mark
+    g.selectAll('.hist')
+      .transition()
+      .duration(600)
+      .attr('y', function (d) { return (d.x0 < 15) ? yHistScale(d.length) : height; })
+      .attr('height', function (d) { return (d.x0 < 15) ? height - yHistScale(d.length) : 0; })
+      .style('opacity', function (d) { return (d.x0 < 15) ? 1.0 : 1e-6; });
+  }
   
     function createChart() {
         const data = Object.entries(averageIncomeByRace).map(([race, avg], index) => ({
@@ -158,6 +183,7 @@
         isVisible = false;
     }
   </script>
+
   
   <svelte:head>
       <title>Wage Disparity Chart</title>
