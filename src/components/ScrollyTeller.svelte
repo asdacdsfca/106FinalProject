@@ -4,7 +4,21 @@
   import Graph from "./Graph.svelte";
   import Income from "./Income.svelte";
   import USMap from "./USMap.svelte";
+  import Educ from "./Educ.svelte";
+  import BasicRegression from "./BasicRegression.svelte";
+  import Bread from "./Bread.svelte";
+
+  
+
   let count, index, offset, progress;
+  let animateBread = false;
+
+  // Assuming the bread section is at a certain index, for example 4
+  $: if (index === 4) {
+    animateBread = true;
+  } else {
+    animateBread = false;
+  }
 </script>
 <Scroller bind:count bind:index bind:offset bind:progress>
   <div class="background" slot="background">
@@ -24,13 +38,19 @@
     <section>
       <Introduction />
     </section>
-
-    <section>
-      <Graph />
-    </section>
     <section>
       <Income {index} />
     </section>
+    <section>
+      <Educ {index} />
+    </section>
+    <section>
+      <BasicRegression />
+    </section>
+    <section>
+      <Bread {animateBread} />
+    </section>
+
     <section>
       <USMap {index} />
     </section>

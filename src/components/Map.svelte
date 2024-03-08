@@ -1,7 +1,6 @@
 <script>
   import mapboxgl from "mapbox-gl";
   import { onMount } from "svelte";
-  export let index;
 
   mapboxgl.accessToken =
     "YOUR_TOKEN_HERE";
@@ -67,13 +66,6 @@
   //     bounds._sw.lat,
   //   ];
   // }
-  let isVisible = false;
-
-  $: if (index === 2) {
-    isVisible = true;
-  } else {
-    isVisible = false;
-  }
 
 </script>
 
