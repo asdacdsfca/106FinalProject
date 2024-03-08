@@ -152,7 +152,7 @@
     }
     let isVisible = false;
 
-    $: if (index === 2) {
+    $: if (index === 3) {
         isVisible = true;
     } else {
         isVisible = false;

@@ -7,7 +7,7 @@
     let svg;
   
     onMount(() => {
-      if (index === 4) {
+      if (index === 2) {
         const width = 960; // SVG width, adjust as needed
         const height = 500; // SVG height, adjust as needed
         const container = d3.select(svg)

@@ -42,17 +42,18 @@
       <Income {index} />
     </section>
     <section>
+      <!-- Add a key that changes based on the index -->
+      {#key index === 2} 
+        <Bread {index} />
+      {/key}
+    </section>
+    <section>
       <Educ {index} />
     </section>
     <section>
       <BasicRegression />
     </section>
-    <section>
-      <!-- Add a key that changes based on the index -->
-      {#key index === 4} 
-        <Bread {index} />
-      {/key}
-    </section>
+    
 
     <section>
       <USMap {index} />
