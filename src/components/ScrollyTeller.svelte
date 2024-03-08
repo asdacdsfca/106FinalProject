@@ -48,7 +48,10 @@
       <BasicRegression />
     </section>
     <section>
-      <Bread {animateBread} />
+      <!-- Add a key that changes based on the index -->
+      {#key index === 4} 
+        <Bread {index} />
+      {/key}
     </section>
 
     <section>
