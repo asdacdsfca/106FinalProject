@@ -8,10 +8,17 @@
     let filteredData = [];
     let ageSelected = writable(25); // Default value
     let educSelected = writable(10); // Default value
-  
+    function renderLatex() {
+    const options = {
+      throwOnError: false
+      };
+      katex.render(`\\text{Predicted Wage for White Individuals: } Wage = ${intercept} + (${coef_educ} \\times Education)`, document.getElementById('wageWhiteEq'), options);
+      katex.render(`\\text{Predicted Wage for Black Individuals: } Wage = ${intercept} + (${coef_educ} \\times Education) + ${coef_race_black} + (${coef_educ_race_black} \\times Education)`, document.getElementById('wageBlackEq'), options);
+    }
     onMount(async () => {
       const response = await fetch(`${base}/output.json`);
       outjsonData.set(await response.json());
+      renderLatex();
     });
 
 
@@ -26,7 +33,6 @@
     $: if (filteredData.length > 0) {
       drawChart(filteredData);
     }
-  
     function drawChart(data) {
       const svg = d3.select('#chart');
       svg.selectAll("*").remove(); // Clear previous SVG contents
@@ -106,6 +112,8 @@
     <input type="number" bind:value={$educationLevel} min="0" id="educationLevel" />
   </div>
   <h2>Predicted Hourly Wage</h2>
+  <div id="wageWhiteEq"></div>
+  <div id="wageBlackEq"></div>
   <p>For a White individual with {$educationLevel} years of education: ${predictedWageWhite.toFixed(2)}</p>
   <p>For a Black individual with {$educationLevel} years of education: ${predictedWageBlack.toFixed(2)}</p>
 
