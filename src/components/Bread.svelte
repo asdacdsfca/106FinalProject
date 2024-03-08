@@ -41,17 +41,40 @@
           .duration(50) // Adjust duration for faster animation
           .attr('opacity', 1); // Fade in each icon
   
-        // Optionally, display the total after all animations
-        setTimeout(() => {
-          container.append('text')
-            .attr('x', width / 2)
-            .attr('y', height / 2)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '24px')
-            .text(`Total Bread: ${loavesCount}`);
-        }, loavesData.length * 2 + 50);
-      }
-    });
+        // Display the total after all animations
+      setTimeout(() => {
+        // Calculate text width and height approximation
+        const textWidth = 300; // Approximate width of text, adjust as needed
+        const textHeight = 100; // Approximate height of text, adjust as needed
+        const rectPadding = 10; // Padding around the rectangle
+
+        // Append a semi-transparent rectangle behind the text
+        container.append('rect')
+          .attr('x', (width / 2) - (textWidth / 2) - rectPadding)
+          .attr('y', (height / 2) - (textHeight / 2) - rectPadding)
+          .attr('width', textWidth + (rectPadding * 2))
+          .attr('height', textHeight + (rectPadding * 2))
+          .attr('fill', 'white')
+          .attr('opacity', 0.7); // Adjust opacity as needed for readability
+
+        // Append text element for "Total Bread:"
+        container.append('text')
+          .attr('x', width / 2)
+          .attr('y', (height / 2) - 20) // Position above the number
+          .attr('text-anchor', 'middle')
+          .style('font-size', '24px')
+          .text('To put this into perspective, that amount could buy nearly');
+
+        // Append text element for the number "2500"
+        container.append('text')
+          .attr('x', width / 2)
+          .attr('y', height / 2 + 50)
+          .attr('text-anchor', 'middle')
+          .style('font-size', '72px') // Larger font size for the number
+          .text(`${loavesCount} loaves of bread!`);
+      }, loavesData.length * 2 + 50);
+    }
+  });
   </script>
   
   <svg bind:this={svg}></svg>
