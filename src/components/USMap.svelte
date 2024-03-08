@@ -82,29 +82,51 @@
             }
         ];
         
-        regions.forEach(region => {
-            // Draw each path for the region
-            region.paths.forEach(d => {
-                svg.append('path')
-                .attr('d', d)
-                .attr('class', 'region')
-                .attr('fill', region.fill)
-                .attr('stroke', '#000')
-                .attr('stroke-width', 1)
-                .on('click', () => alert(`Region: ${region.name}`));
-            });
-        });
+    // Create a group for each region
+    regions.forEach(region => {
+      const group = svg.append('g')
+        .attr('class', 'region-group')
+        .on('mouseover', function() { d3.select(this).classed('hover', true); })
+        .on('mouseout', function() { d3.select(this).classed('hover', false); })
+        .on('click', () => alert(`Region: ${region.name}`));
 
-        return () => {
-            svg.remove();
-        };
+      // Draw each path for the region within its group
+      region.paths.forEach(d => {
+        group.append('path')
+          .attr('d', d)
+          .attr('fill', region.fill)
+          .attr('stroke', '#000')
+          .attr('stroke-width', 1);
+      });
     });
+  });
+  let isVisible = false;
+
+    $: if (index === 5) {
+        isVisible = true;
+    } else {
+        isVisible = false;
+    }
 </script>
 
 <style>
-  .map-container svg { width: 100%; max-width: 960px; height: auto; }
-  .region:hover { fill: #aaaaaa; }
-</style>
+    .map-container svg { width: 100%; max-width: 960px; height: auto; }
+    .region-group:hover { fill: #aaaaaa; }
+    /* Apply hover styles to paths in a group */
+    .region-group.hover path { fill: #aaaaaa; }
+    .map-container{
+        width: 100%;
+        height: 100vh; /* check problem when setting width */
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 2s, visibility 2s;
+        /* outline: blue solid 3px; */
+    }
+    .map-container.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+  </style>
 
 <div class="map-container"></div>
-  

@@ -5,62 +5,37 @@
     export let index;
   
     let jsonData;
-    let averageIncomeByRace = {};
-    let svg, g;
+    let averageEDUCByRace = {};
   
     onMount(async () => {
-      const response = await fetch(`${base}/data.json`);
-      jsonData = await response.json();
-      if (jsonData) {
-          jsonData.forEach(item => {
-              if (averageIncomeByRace[item.RACE]) {
-                  averageIncomeByRace[item.RACE].total += parseInt(item.HOURWAGE);
-                  averageIncomeByRace[item.RACE].count += 1;
-              } else {
-                  averageIncomeByRace[item.RACE] = { total: parseInt(item.HOURWAGE), count: 1 };
-              }
-          });
-
-          for (let race in averageIncomeByRace) {
-              averageIncomeByRace[race] = averageIncomeByRace[race].total / averageIncomeByRace[race].count;
-          }
-
-          createChart();
-      }
-  });
-
-    function showHistPart() {
-    // switch the axis to histogram one
-    showAxis(xAxisHist);
-
-    g.selectAll('.bar-text')
-      .transition()
-      .duration(0)
-      .attr('opacity', 0);
-
-    g.selectAll('.bar')
-      .transition()
-      .duration(600)
-      .attr('width', 0);
-
-    // here we only show a bar if
-    // it is before the 15 minute mark
-    g.selectAll('.hist')
-      .transition()
-      .duration(600)
-      .attr('y', function (d) { return (d.x0 < 15) ? yHistScale(d.length) : height; })
-      .attr('height', function (d) { return (d.x0 < 15) ? height - yHistScale(d.length) : 0; })
-      .style('opacity', function (d) { return (d.x0 < 15) ? 1.0 : 1e-6; });
-  }
+        const response = await fetch(`${base}/data.json`);
+        jsonData = await response.json();
+        if (jsonData) {
+            jsonData.forEach(item => {
+                if (averageEDUCByRace[item.RACE]) {
+                    averageEDUCByRace[item.RACE].total += parseInt(item.EDUC);
+                    averageEDUCByRace[item.RACE].count += 1;
+                } else {
+                    averageEDUCByRace[item.RACE] = { total: parseInt(item.EDUC), count: 1 };
+                }
+            });
+  
+            for (let race in averageEDUCByRace) {
+                averageEDUCByRace[race] = averageEDUCByRace[race].total / averageEDUCByRace[race].count;
+            }
+  
+            createChart();
+        }
+    });
   
     function createChart() {
-        const data = Object.entries(averageIncomeByRace).map(([race, avg], index) => ({
+        const data = Object.entries(averageEDUCByRace).map(([race, avg], index) => ({
             race,
-            averageIncome: avg,
+            averageEDUC: avg,
             color: index === 0 ? 'red' : index === 1 ? 'blue' : 'steelblue'
         }));
   
-        const svg = d3.select("#raceIncomeChart"),
+        const svg = d3.select("#raceEDUCChart"),
               margin = {top: 40, right: 20, bottom: 60, left: 60},
               width = +svg.attr("width") - margin.left - margin.right,
               height = +svg.attr("height") - margin.top - margin.bottom;
@@ -75,7 +50,7 @@
            .attr("transform", `translate(${margin.left},${margin.top})`);
   
         x.domain(data.map(d => d.race));
-        y.domain([0, d3.max(data, d => d.averageIncome)]);
+        y.domain([0, d3.max(data, d => d.averageEDUC)]);
   
         // Tooltip setup
         const tooltip = d3.select("body").append("div")
@@ -120,8 +95,8 @@
             .attr("class", "bar")
             .attr("x", d => x(d.race))
             .attr("width", x.bandwidth())
-            .attr("y", d => y(d.averageIncome))
-            .attr("height", d => height - y(d.averageIncome))
+            .attr("y", d => y(d.averageEDUC))
+            .attr("height", d => height - y(d.averageEDUC))
             .attr("fill", d => d.color)
             .on("mouseover", function(event, d) {
                 // Highlight the bar
@@ -177,13 +152,12 @@
     }
     let isVisible = false;
 
-    $: if (index === 1) {
+    $: if (index === 2) {
         isVisible = true;
     } else {
         isVisible = false;
     }
   </script>
-
   
   <svelte:head>
       <title>Wage Disparity Chart</title>
@@ -191,7 +165,7 @@
   
   <div class="chart-container" class:visible={isVisible}>
       <h2 class="chart-title">Wage Disparity Chart</h2>
-      <svg id="raceIncomeChart" width="960" height="600"></svg>
+      <svg id="raceEDUCChart" width="960" height="600"></svg>
   </div>
   
   <style>
