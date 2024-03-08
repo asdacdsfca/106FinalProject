@@ -86,11 +86,11 @@
            .attr("d", line);
     }
     ///////
-    let intercept = 1.0; // placeholder for intercept from the model
-    let coef_educ = 3; // placeholder for education coefficient from the model
-    let coef_race_black = -2; // placeholder for race (Black) coefficient from the model
-    let coef_educ_race_black = -3;
-    let educationLevel = writable(10);
+    let intercept = -16.3064; // placeholder for intercept from the model
+    let coef_educ = 3.6208; // placeholder for education coefficient from the model
+    let coef_race_black = -0.0658; // placeholder for race (Black) coefficient from the model
+    let coef_educ_race_black = -0.3298;
+    let educationLevel = writable();
 
     // Function to calculate predicted hourly wage for White individuals
     function predictWageWhite(education) {
@@ -107,9 +107,11 @@
     $: predictedWageBlack = ($educationLevel * coef_educ + intercept) + coef_race_black + ($educationLevel * coef_educ_race_black);
 
   </script>
+  <h2>Feel Free to Play Around and See how Education Effects Wage Differently for Blacks and Whites!</h2>
   <div>
+    <h2>Education Level Input</h2>
     <label for="educationLevel">Years of Education:</label>
-    <input type="number" bind:value={$educationLevel} min="0" id="educationLevel" />
+    <input type="number" bind:value={$educationLevel} min="0" id="educationLevel" placeholder="Change the years of education here" />
   </div>
   <h2>Predicted Hourly Wage</h2>
   <div id="wageWhiteEq"></div>
