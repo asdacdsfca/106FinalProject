@@ -38,10 +38,8 @@
   function predictWageBlack(education) {
     return intercept + coef_educ * education + coef_race_black + coef_educ_race_black * education;
   }
-  $: $educSelected, drawCombinedGraph();
   function drawCombinedGraph() {
   // Clear existing graph
-  const educationLevel = $educSelected;
   d3.select("#chart").selectAll("*").remove();
 
   const svgWidth = 500;
@@ -60,8 +58,7 @@
   let data = d3.range(0, 21).map(function(d) {
     return {education: d, wageWhite: intercept + coef_educ * d, wageBlack: intercept + coef_educ * d + coef_race_black + coef_educ_race_black * d};
   });
-  const predictedWageWhite = predictWageWhite($educSelected);
-  const predictedWageBlack = predictWageBlack($educSelected);
+
   // Add X axis
   const x = d3.scaleLinear()
     .domain([0, 20])
@@ -120,34 +117,6 @@
   svg.append("circle").attr("cx",200).attr("cy",20).attr("r", 6).style("fill", "red")
   svg.append("text").attr("x", 220).attr("y", 0).text("White Individuals").style("font-size", "15px").attr("alignment-baseline","middle")
   svg.append("text").attr("x", 220).attr("y", 20).text("Black Individuals").style("font-size", "15px").attr("alignment-baseline","middle")
-  svg.append("circle")
-    .attr("cx", x($educSelected))
-    .attr("cy", y(predictedWageWhite))
-    .attr("r", 5)
-    .style("fill", "orange"); // Use a distinct color
-
-  // Label or arrow pointing to the White prediction marker
-  svg.append("text")
-    .attr("x", x($educSelected))
-    .attr("y", y(predictedWageWhite) - 10) // Adjust position as needed
-    .text("White Prediction")
-    .style("font-size", "12px")
-    .attr("text-anchor", "middle");
-
-  // For Black Individuals
-  svg.append("circle")
-    .attr("cx", x($educSelected))
-    .attr("cy", y(predictedWageBlack))
-    .attr("r", 5)
-    .style("fill", "green"); // Use a distinct color
-
-  // Label or arrow pointing to the Black prediction marker
-  svg.append("text")
-    .attr("x", x($educSelected))
-    .attr("y", y(predictedWageBlack) - 10) // Adjust position as needed
-    .text("Black Prediction")
-    .style("font-size", "12px")
-    .attr("text-anchor", "middle");
 }
 
 // These are computed values based on `educationLevel`, recalculated whenever `educationLevel` changes
