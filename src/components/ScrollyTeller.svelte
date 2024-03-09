@@ -1,4 +1,5 @@
 <script>
+  import { onMount, createEventDispatcher } from 'svelte';
   import Scroller from "@sveltejs/svelte-scroller";
   import Introduction from "./Introduction.svelte";
   import Graph from "./Graph.svelte";
@@ -7,18 +8,29 @@
   import Educ from "./Educ.svelte";
   import BasicRegression from "./BasicRegression.svelte";
   import Bread from "./Bread.svelte";
+    import AgeEduc from "./AgeEduc.svelte";
 
   
 
   let count, index, offset, progress;
-  let animateBread = false;
+  let canNavigateToAgeEduc = false;
+  let showIncorrectChoiceMessage = false;
 
-  // Assuming the bread section is at a certain index, for example 4
-  $: if (index === 4) {
-    animateBread = true;
-  } else {
-    animateBread = false;
+  const dispatch = createEventDispatcher();
+
+  function navigateToNextSection() {
+    canNavigateToAgeEduc = true;
+    showIncorrectChoiceMessage = false; // Reset the message display
   }
+
+  function handleIncorrectChoice() {
+    showIncorrectChoiceMessage = true;
+  }
+
+  onMount(() => {
+    // Component setup logic
+  });
+
 </script>
 <Scroller bind:count bind:index bind:offset bind:progress>
   <div class="background" slot="background">
@@ -38,29 +50,47 @@
     <section>
       <Introduction />
     </section>
+
     <section>
       <Income {index} />
     </section>
+
     <section>
       <!-- Add a key that changes based on the index -->
       {#key index === 2} 
         <Bread {index} />
       {/key}
     </section>
+
     <section>
       <Educ {index} />
     </section>
+
     <section>
-      <BasicRegression />
+      {#if index === 4 || canNavigateToAgeEduc}
+        <BasicRegression {index} />
+        <div class="button-container">
+        <button on:click={navigateToNextSection}>Go to Next Section</button>
+        <button on:click={handleIncorrectChoice}>Incorrect Choice</button>
+      </div>
+        {#if showIncorrectChoiceMessage}
+          <p class="error-message">This is not the correct choice. Please try again.</p>
+        {/if}
+      {/if}
     </section>
-    
+
+    <section>
+      {#if canNavigateToAgeEduc}
+        <AgeEduc {index} />
+      {/if}
+    </section>
 
     <section>
       <USMap {index} />
     </section>
   </div>
-
 </Scroller>
+
 <style>
   .progress-bars {
     position: absolute;
@@ -83,5 +113,34 @@
   padding: 1em;
   margin: auto; /* Centers the section horizontally */
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* This will put space between the buttons */
+    align-items: center; /* This will vertically center align the items */
+    gap: 40px;
+    margin-bottom: 1rem; /* Give some space below the buttons */
+  }
+
+  button {
+    padding: 1rem 2rem; /* Larger padding for bigger buttons */
+    font-size: 1.2rem; /* Larger font size for text inside buttons */
+    cursor: pointer; /* Changes the cursor to indicate it's clickable */
+    margin: 0; /* Reset any default margin */
+    border: 1px solid #ccc; /* Add a border to the button */
+    background-color: #f8f8f8; /* Light background for the button */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+
+  button:hover {
+    background-color: #e8e8e8; /* Slightly darker background on hover */
+  }
+
+  .error-message {
+    color: red;
+    text-align: center; /* Center-align the error message text */
+    font-size: 36px;
+    margin-top: 1rem; /* Give some space above the error message */
+  }
 
 </style>
