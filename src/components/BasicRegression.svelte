@@ -43,6 +43,7 @@
     return intercept + coef_educ * education + coef_race_black + coef_educ_race_black * education;
   }
   $: $educationLevel, drawCombinedGraph();
+  
   function drawCombinedGraph() {
   // Clear existing graph to prevent overlap
   d3.select("#chart").selectAll("*").remove();
@@ -140,14 +141,3 @@
   margin: auto;
 }
 </style>
-
-<div>
-  <input type="range" bind:value={$educSelected} min="0" max="20" step="1">
-  <span>Education Years: {$educSelected}</span>
-</div>
-
-
-
-<div>
-  <svg id="chart"></svg>
-</div>

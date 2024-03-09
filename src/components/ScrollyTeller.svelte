@@ -9,6 +9,7 @@
   import BasicRegression from "./BasicRegression.svelte";
   import Bread from "./Bread.svelte";
     import AgeEduc from "./AgeEduc.svelte";
+    import Test from './Test.svelte';
 
   
 
@@ -91,6 +92,10 @@
       {#if canNavigateToAgeEduc}
         <AgeEduc {index} />
       {/if}
+    </section>
+
+    <section>
+      <Test />
     </section>
 
     <section>
