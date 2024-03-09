@@ -9,14 +9,14 @@
     onMount(() => {
       if (index === 2) {
         const width = 960; // SVG width, adjust as needed
-        const height = 500; // SVG height, adjust as needed
+        const height = 1000; // SVG height, adjust as needed
         const container = d3.select(svg)
           .attr('width', width)
           .attr('height', height);
   
         // Assuming a grid layout for bread icons, adjust as needed
         const iconWidth = 30;
-        const iconHeight = 50;
+        const iconHeight = 30;
         const iconsPerRow = Math.floor(width / iconWidth);
   
         const loavesData = Array.from({ length: loavesCount }, (_, i) => ({
@@ -38,15 +38,15 @@
           .attr('opacity', 0) // Start with 0 opacity for animation
           .transition()
           .delay((_, i) => i * 2) // Adjust delay for faster animation
-          .duration(50) // Adjust duration for faster animation
+          .duration(25) // Adjust duration for faster animation
           .attr('opacity', 1); // Fade in each icon
   
         // Display the total after all animations
       setTimeout(() => {
         // Calculate text width and height approximation
-        const textWidth = 300; // Approximate width of text, adjust as needed
-        const textHeight = 100; // Approximate height of text, adjust as needed
-        const rectPadding = 10; // Padding around the rectangle
+        const textWidth = 700; // Approximate width of text, adjust as needed
+        const textHeight = 70; // Approximate height of text, adjust as needed
+        const rectPadding = 50; // Padding around the rectangle
 
         // Append a semi-transparent rectangle behind the text
         container.append('rect')
@@ -63,6 +63,7 @@
           .attr('y', (height / 2) - 20) // Position above the number
           .attr('text-anchor', 'middle')
           .style('font-size', '24px')
+          .style('font-weight', 'bold')
           .text('To put this into perspective, that amount could buy nearly');
 
         // Append text element for the number "2500"
@@ -70,7 +71,8 @@
           .attr('x', width / 2)
           .attr('y', height / 2 + 50)
           .attr('text-anchor', 'middle')
-          .style('font-size', '72px') // Larger font size for the number
+          .style('font-size', '72px')
+          .style('font-weight', 'bold')
           .text(`${loavesCount} loaves of bread!`);
       }, loavesData.length * 2 + 50);
     }

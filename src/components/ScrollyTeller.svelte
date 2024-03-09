@@ -32,7 +32,15 @@
   });
 
 </script>
-<Scroller bind:count bind:index bind:offset bind:progress>
+<Scroller
+  top={0.0}
+  bottom={1}
+  threshold={0.5}
+  bind:count
+  bind:index
+  bind:offset
+  bind:progress
+>
   <div class="background" slot="background">
     <div class="progress-bars">
       <p>current section: <strong>{index + 1}/{count}</strong></p>
@@ -92,6 +100,8 @@
 </Scroller>
 
 <style>
+  
+
   .progress-bars {
     position: absolute;
     background: rgba(170, 51, 120, 0.2) /*  40% opaque */;
