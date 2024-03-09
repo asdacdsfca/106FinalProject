@@ -21,3 +21,18 @@ body, html {
   .map-container.visible {
     opacity: 1; /* Make the map visible when in viewport */
   }
+
+  .tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 12px;
+    background: white;
+    border: 1px solid #000;
+    border-radius: 8px;
+    pointer-events: none; /* To prevent mouse events on the tooltip */
+    z-index: 10;
+}
+
+.map-container svg { width: 100%; max-width: 960px; height: auto; }
+.region-group:hover { fill: #aaaaaa; }
+.region-group.hover path { fill: #aaaaaa; }

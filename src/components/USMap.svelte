@@ -2,6 +2,14 @@
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
     export let index;
+
+    let isVisible = false;
+
+    $: if (index === 6) {
+        isVisible = true;
+    } else {
+        isVisible = false;
+    }
   
     onMount(() => {
       const width = 960, height = 600;
@@ -81,52 +89,71 @@
             "M 503.38059,325.13028 L 490.76233,325.33471 L 444.67324,324.87748 L 400.11576,322.81985 L 375.48602,321.56244 L 379.62981,256.84247 L 401.46327,257.64264 L 441.92918,259.01437 L 486.05364,259.47162 L 491.14927,259.47162 L 494.39617,262.69652 L 497.16383,262.92514 L 498.05413,264.00011 L 498.05413,266.00934 L 496.22515,267.60971 L 495.7679,270.21688 L 497.98598,273.80671 L 500.50084,276.93927 L 503.01569,278.92873 L 504.06646,290.10705 z"]
             }
         ];
+
+        // Add a div for the tooltip - you need to include this in your HTML
+        const tooltip = d3.select('body').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0);
         
-    // Create a group for each region
-    regions.forEach(region => {
-      const group = svg.append('g')
-        .attr('class', 'region-group')
-        .on('mouseover', function() { d3.select(this).classed('hover', true); })
-        .on('mouseout', function() { d3.select(this).classed('hover', false); })
-        .on('click', () => alert(`Region: ${region.name}`));
+          regions.forEach(region => {
+        const group = svg.append('g')
+          .attr('class', 'region-group')
+          .on('mouseover', function(event) {
+            d3.select(this).selectAll('path').attr('fill', '#aaaaaa');
+            tooltip.transition()
+        .duration(200)
+        .style('opacity', .9);
+        tooltip.html(`Region: ${region.name}`)
+        .style('left', (event.pageX) + 'px')
+        .style('top', (event.pageY - 28) + 'px');
+          })
+          .on('mouseout', function() {
+            d3.select(this).selectAll('path').attr('fill', region.fill);
+            tooltip.transition()
+        .duration(500)
+        .style('opacity', 0);
+          });
 
-      // Draw each path for the region within its group
-      region.paths.forEach(d => {
-        group.append('path')
-          .attr('d', d)
-          .attr('fill', region.fill)
-          .attr('stroke', '#000')
-          .attr('stroke-width', 1);
-      });
-    });
+        region.paths.forEach(d => {
+          group.append('path')
+            .attr('d', d)
+            .attr('fill', region.fill)
+            .attr('stroke', '#000')
+            .attr('stroke-width', 1);
+        });
   });
-  let isVisible = false;
+  });
 
-    $: if (index === 6) {
-        isVisible = true;
-    } else {
-        isVisible = false;
-    }
 </script>
 
 <style>
-    .map-container svg { width: 100%; max-width: 960px; height: auto; }
-    .region-group:hover { fill: #aaaaaa; }
-    /* Apply hover styles to paths in a group */
-    .region-group.hover path { fill: #aaaaaa; }
-    .map-container{
-        width: 100%;
-        height: 100vh; /* check problem when setting width */
-        position: absolute;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 2s, visibility 2s;
-        /* outline: blue solid 3px; */
-    }
-    .map-container.visible {
-        opacity: 1;
-        visibility: visible;
-    }
+    .tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 12px;
+    background: white;
+    border: 1px solid #000;
+    border-radius: 8px;
+    pointer-events: none; /* To prevent mouse events on the tooltip */
+    z-index: 10;
+}
+
+/* Existing styles */
+.map-container svg { width: 100%; max-width: 960px; height: auto; }
+.region-group:hover { fill: #aaaaaa; }
+.region-group.hover path { fill: #aaaaaa; }
+.map-container{
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 2s, visibility 2s;
+}
+.map-container.visible {
+    opacity: 1;
+    visibility: visible;
+}
   </style>
 
 <div class="map-container" class:visible={isVisible}></div>

@@ -109,7 +109,7 @@
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html(`Race: ${d.race}<br/>Average Hourly Wage: $${d.averageIncome.toFixed(2)}`)
+                tooltip.html(`Race: ${d.race}<br/>Average Education Length: ${d.averageEDUC.toFixed(0)} years`)
                     .style("left", (event.pageX) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
@@ -160,11 +160,11 @@
   </script>
   
   <svelte:head>
-      <title>Wage Disparity Chart</title>
+      <title>Education Disparity Chart</title>
   </svelte:head>
   
   <div class="chart-container" class:visible={isVisible}>
-      <h2 class="chart-title">Wage Disparity Chart</h2>
+      <h2 class="chart-title">Education Disparity Chart</h2>
       <svg id="raceEDUCChart" width="960" height="600"></svg>
   </div>
   

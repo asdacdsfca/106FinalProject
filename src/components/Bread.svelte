@@ -9,14 +9,14 @@
     onMount(() => {
       if (index === 2) {
         const width = 960; // SVG width, adjust as needed
-        const height = 1000; // SVG height, adjust as needed
+        const height = 1100; // SVG height, adjust as needed
         const container = d3.select(svg)
           .attr('width', width)
           .attr('height', height);
   
         // Assuming a grid layout for bread icons, adjust as needed
-        const iconWidth = 30;
-        const iconHeight = 30;
+        const iconWidth = 20;
+        const iconHeight = 20;
         const iconsPerRow = Math.floor(width / iconWidth);
   
         const loavesData = Array.from({ length: loavesCount }, (_, i) => ({
@@ -38,7 +38,7 @@
           .attr('opacity', 0) // Start with 0 opacity for animation
           .transition()
           .delay((_, i) => i * 2) // Adjust delay for faster animation
-          .duration(25) // Adjust duration for faster animation
+          .duration(10) // Adjust duration for faster animation
           .attr('opacity', 1); // Fade in each icon
   
         // Display the total after all animations

@@ -8,13 +8,18 @@
   let filteredData = [];
   let ageSelected = writable(25); // Default value
   let educSelected = writable(10); // Default value
+  let intercept = 33.2258; // Placeholder for intercept from the model
+  let coef_educ = 3.6208; // Placeholder for education coefficient from the model
+  let coef_race_black = -8.8936; // Placeholder for race (Black) coefficient from the model
+  let coef_educ_race_black = -1.7476 ;
+
+
+
   function renderLatex() {
-  const options = {
-    throwOnError: false
-    };
-    katex.render(`\\text{Predicted Wage for White Individuals: } Wage = ${intercept} + (${coef_educ} \\times Education)`, document.getElementById('wageWhiteEq'), options);
-    katex.render(`\\text{Predicted Wage for Black Individuals: } Wage = ${intercept} + (${coef_educ} \\times Education)  + (${coef_race_black} \\times Black) + (${coef_educ_race_black} \\times Black*Educ)`, document.getElementById('wageBlackEq'), options);
-  }
+      const options = { throwOnError: false };
+  katex.render(`\\text{Predicted Wage: } Wage = ${intercept.toFixed(2)} + (${coef_educ.toFixed(2)} \\times Education)  + (${coef_race_black.toFixed(2)} \\times Black) + (${coef_educ_race_black.toFixed(2)} \\times Education \\times Black)`, document.getElementById('wageBlackEq'), options);
+  
+    }
 
   $: predictedWageWhite = $educationLevel * coef_educ + intercept;
   $: predictedWageBlack = ($educationLevel * coef_educ + intercept) + (coef_race_black) + ($educationLevel * coef_educ_race_black);
@@ -27,10 +32,6 @@
     drawCombinedGraph();
   });
   ///////
-  let intercept = -16.3064; // placeholder for intercept from the model
-  let coef_educ = 3.6208; // placeholder for education coefficient from the model
-  let coef_race_black = -0.0658; // placeholder for race (Black) coefficient from the model
-  let coef_educ_race_black = -0.3298;
   let educationLevel = writable();
 
   // Function to calculate predicted hourly wage for White individuals
@@ -107,8 +108,19 @@
       .attr("y", d => y(d.wage))
       .attr("height", d => height - y(d.wage))
       .attr("fill", d => d.education === "White" ? "steelblue" : "red");
-}
 
+      svg.selectAll(".label")
+      .data(data)
+      .join("text")
+      .attr("class", "label")
+      .attr("x", (d) => x(d.education) + x.bandwidth() / 2)
+      .attr("y", (d) => y(d.wage) - 5)
+      .attr("text-anchor", "middle")
+      .text((d) => d.wage.toFixed(2));
+
+
+
+}
 </script>
 <h2 style="color: red; font-weight: bold;font-style: italic;">**Feel Free to Play Around and See how Education Affects Wage Differently for Blacks and Whites!**</h2>
 
