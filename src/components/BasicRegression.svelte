@@ -131,8 +131,6 @@
 </div>
 
 <h2>Predicted Hourly Wage</h2>
-<div id="wageWhiteEq"></div>
-<br>
 <div id="wageBlackEq"></div>
 <p>For a White individual with {$educationLevel} years of education: ${predictedWageWhite.toFixed(2)}</p >
 <p>For a Black individual with {$educationLevel} years of education: ${predictedWageBlack.toFixed(2)}</p >

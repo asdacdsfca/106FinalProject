@@ -1,14 +1,15 @@
 <script>
-  import { onMount, createEventDispatcher } from 'svelte';
-  import Scroller from "@sveltejs/svelte-scroller";
-  import Introduction from "./Introduction.svelte";
-  import Graph from "./Graph.svelte";
-  import Income from "./Income.svelte";
-  import USMap from "./USMap.svelte";
-  import Educ from "./Educ.svelte";
-  import BasicRegression from "./BasicRegression.svelte";
-  import Bread from "./Bread.svelte";
-  import AgeEduc from './AgeEduc.svelte';
+    import { onMount, createEventDispatcher } from 'svelte';
+    import Scroller from "@sveltejs/svelte-scroller";
+    import Introduction from "./Introduction.svelte";
+    import Graph from "./Graph.svelte";
+    import Income from "./Income.svelte";
+    import USMap from "./USMap.svelte";
+    import Educ from "./Educ.svelte";
+    import BasicRegression from "./BasicRegression.svelte";
+    import Bread from "./Bread.svelte";
+    import AgeEduc from './AgeEduc.svelte';
+    import AgeEducRegion from './AgeEducRegion.svelte';
 
   let count, index, offset, progress;
   let canNavigateToAgeEduc = false;
@@ -87,6 +88,10 @@
       {#if canNavigateToAgeEduc}
       <AgeEduc {index} />
       {/if}
+    </section>
+
+    <section>
+      <AgeEducRegion />
     </section>
 
     <section>
