@@ -8,16 +8,11 @@
   import Educ from "./Educ.svelte";
   import BasicRegression from "./BasicRegression.svelte";
   import Bread from "./Bread.svelte";
-    import AgeEduc from "./AgeEduc.svelte";
-    import Test from './Test.svelte';
-
-  
+  import AgeEduc from './AgeEduc.svelte';
 
   let count, index, offset, progress;
   let canNavigateToAgeEduc = false;
   let showIncorrectChoiceMessage = false;
-
-  const dispatch = createEventDispatcher();
 
   function navigateToNextSection() {
     canNavigateToAgeEduc = true;
@@ -90,12 +85,8 @@
 
     <section>
       {#if canNavigateToAgeEduc}
-        <AgeEduc {index} />
+      <AgeEduc {index} />
       {/if}
-    </section>
-
-    <section>
-      <Test />
     </section>
 
     <section>

@@ -2,155 +2,157 @@
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import * as d3 from 'd3';
+    import { scaleBand, scaleLinear } from 'd3-scale';
+    import { max } from 'd3-array';
     import { base } from '$app/paths';
   
     let outjsonData = writable([]);
-    let ageSelected = writable(25); // Default age selection
-    const fixedEducationLevel = 16; // Education level fixed at 16
-    let intercept = -16.3064; // Placeholder for intercept from the model
-    let coef_educ = 3.6208; // Placeholder for education coefficient from the model
-    let coef_race_black = -0.0658; // Placeholder for race (Black) coefficient from the model
-    let coef_educ_race_black = -0.3102 ; // Placeholder for interaction term
-    let coef_age = 0.3027; // Placeholder for age coefficient from the model
-    let coef_age_educ = 0.0121; // Placeholder for age and education interaction coefficient from the model
-    let ageLevel = writable(25); // Initializing with a default value
+    let ageLevel = writable(); // Use writable store for age
+    let educationLevel = writable(); // Add writable store for education level
+    let intercept = -16.3064;
+    let coef_educ = 3.6208;
+    let coef_race_black = -0.0658;
+    let coef_educ_race_black = -0.3102;
+    let coef_age = 0.3027;
+    let coef_age_educ = 0.0121;
+
+    let predictedWageWhite, predictedWageBlack;
   
     // Updated function to calculate predicted hourly wage, considering fixed education level
-    function predictWageWhite(age) {
-      return intercept + coef_educ * fixedEducationLevel + coef_age * age + coef_age_educ * age * fixedEducationLevel;
+    function predictWageWhite(age, education) {
+      return intercept + coef_educ * education + coef_age * age + coef_age_educ * age * education;
     }
   
-    function predictWageBlack(age) {
-      return intercept + coef_educ * fixedEducationLevel + coef_race_black + coef_educ_race_black * fixedEducationLevel + coef_age * age + coef_age_educ * age * fixedEducationLevel;
+    function predictWageBlack(age, education) {
+      return intercept + coef_educ * education + coef_race_black + coef_educ_race_black * education + coef_age * age + coef_age_educ * age * education;
     }
+
+    $: predictedWageWhite = predictWageWhite($ageLevel, $educationLevel);
+    $: predictedWageBlack = predictWageBlack($ageLevel, $educationLevel);
   
     // Adjusted for new parameters and fixed education level
-    $: predictedWageWhite = predictWageWhite($ageLevel);
-    $: predictedWageBlack = predictWageBlack($ageLevel);
+    function updateWagesAndDrawChart() {
+            drawChart();
+    }
   
     // Updated renderLatex to include age and fixed education level in the equation
     function renderLatex() {
       const options = { throwOnError: false };
-  katex.render(`\\text{Predicted Wage for White Individuals: } Wage = ${intercept.toFixed(2)} + (${coef_educ.toFixed(2)} \\times Education) + (${coef_age.toFixed(2)} \\times Age) + (${coef_age_educ.toFixed(2)} \\times Education \\times Age)`, document.getElementById('wageWhiteEq_AE'), options);
-  katex.render(`\\text{Predicted Wage for Black Individuals: } Wage = ${intercept.toFixed(2)} + (${coef_educ.toFixed(2)} \\times Education)  + (${-0.376.toFixed(2)} \\times Black) + (${coef_age.toFixed(2)} \\times Age) + (${coef_age_educ.toFixed(2)} \\times Education \\times Age)`, document.getElementById('wageBlackEq_AE'), options);
-  
+        katex.render(`\\text{Predicted Wage for White Individuals: } Wage = ${intercept.toFixed(2)} + 
+        (${coef_educ.toFixed(2)} \\times Education) + (${coef_age.toFixed(2)} \\times Age) + 
+        (${coef_age_educ.toFixed(2)} \\times Education \\times Age)`, document.getElementById('wageWhiteEq_AET'), options);
+        katex.render(`\\text{Predicted Wage for Black Individuals: } Wage = ${intercept.toFixed(2)} + 
+        (${coef_educ.toFixed(2)} \\times Education)  + (${-0.376.toFixed(2)} \\times Black) + 
+        (${coef_age.toFixed(2)} \\times Age) + (${coef_age_educ.toFixed(2)} \\times Education \\times Age)`, document.getElementById('wageBlackEq_AET'), options);
     }
-  
+
     onMount(async () => {
       const response = await fetch(`${base}/output.json`);
       outjsonData.set(await response.json());
       renderLatex();
-  
-      drawCombinedGraph();
+
+      drawChart();
     });
-  
-    function drawCombinedGraph() {
-      d3.select("#chart_AE").selectAll("*").remove();
-      const svgWidth = 500;
-      const svgHeight = 450;
-      const margin = { top: 40, right: 30, bottom: 70, left: 60 },
-            width = svgWidth - margin.left - margin.right,
-            height = svgHeight - margin.top - margin.bottom;
-  
-      const svg = d3.select("#chart_AE")
-                    .attr("width", svgWidth)
-                    .attr("height", svgHeight)
-                    .append("g")
-                    .attr("transform", `translate(${margin.left},${margin.top})`);
-  
-      // Data generation for lines, considering a range of ages from 18 to 65
-      let data = d3.range(18, 66).map(age => ({
-        age: age,
-        wageWhite: predictWageWhite(age),
-        wageBlack: predictWageBlack(age)
-      }));
-  
-      // Add X axis
-      const x = d3.scaleLinear()
-                  .domain([18, 65])
-                  .range([0, width]);
-      svg.append("g")
-         .attr("transform", `translate(0, ${height})`)
-         .call(d3.axisBottom(x))
-         .append("text")
-         .attr("x", width / 2)
-         .attr("y", 40)
-         .attr("fill", "black")
-         .style("text-anchor", "middle")
-         .text("Age");
-  
-      // Add Y axis
-      const y = d3.scaleLinear()
-                  .domain([0, d3.max(data, d => Math.max(d.wageWhite, d.wageBlack))])
-                  .range([height, 0]);
-      svg.append("g")
-         .call(d3.axisLeft(y))
-         .append("text")
-         .attr("transform", "rotate(-90)")
-         .attr("y", -40)
-         .attr("x", -height / 2)
-         .attr("dy", "1em")
-         .attr("fill", "black")
-         .style("text-anchor", "middle")
-         .text("Predicted Wage");
-  
-      // Line generators
-      const lineWhite = d3.line()
-                          .x(d => x(d.age))
-                          .y(d => y(d.wageWhite));
-      const lineBlack = d3.line()
-                          .x(d => x(d.age))
-                          .y(d => y(d.wageBlack));
-  
-      // Draw lines
-      svg.append("path")
-         .datum(data)
-         .attr("fill", "none")
-         .attr("stroke", "steelblue")
-         .attr("stroke-width", 1.5)
-         .attr("d", lineWhite);
-  
-      svg.append("path")
-         .datum(data)
-         .attr("fill", "none")
-         .attr("stroke", "red")
-         .attr("stroke-width", 1.5)
-         .attr("d", lineBlack);
-  
-      // Legend
-      svg.append("circle").attr("cx", 400).attr("cy", 0).attr("r", 6).style("fill", "steelblue")
-      svg.append("circle").attr("cx", 400).attr("cy", 20).attr("r", 6).style("fill", "red")
-      svg.append("text").attr("x", 420).attr("y", 0).text("White Individuals").style("font-size", "15px").attr("alignment-baseline", "middle")
-      svg.append("text").attr("x", 420).attr("y", 20).text("Black Individuals").style("font-size", "15px").attr("alignment-baseline", "middle")
+
+
+    function drawChart() {
+        d3.select("#chart_AET").selectAll("*").remove();
+
+    const data = [
+      { label: "White", value: predictWageWhite($ageLevel, $educationLevel) },
+      { label: "Black", value: predictWageBlack($ageLevel, $educationLevel) }
+    ];
+    // SVG setup
+  const svgWidth = 500;
+  const svgHeight = 450;
+  const margin = {top: 40, right: 30, bottom: 70, left: 60};
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
+
+    const x = scaleBand()
+      .range([0, width])
+      .domain(data.map((d) => d.label))
+      .padding(0.1);
+      
+    const y = scaleLinear()
+        .domain([0, max(data, (d) => d.value)])
+        .range([height, 0]);
+      
+      const svg = d3.select("#chart_AET")
+                .attr("width", svgWidth)
+                .attr("height", svgHeight)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+     // Add x-axis
+    svg.append("g")
+       .attr("transform", "translate(0," + height + ")")
+       .call(d3.axisBottom(x));
+
+    // Add y-axis
+    svg.append("g")
+       .call(d3.axisLeft(y));
+
+       svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left)
+  .attr("x",0 - (height / 2))
+  .attr("dy", "1em")
+  .style("text-anchor", "middle")
+  .text("Predicted Wage");
+    
+    svg.selectAll(".bar")
+      .data(data)
+      .join("rect")
+      .attr("class", "bar")
+      .attr("x", (d) => x(d.label))
+      .attr("width", x.bandwidth())
+      .attr("y", (d) => y(d.value))
+      .attr("height", (d) => height - y(d.value))
+      .attr("fill", (d) => d.label === "White" ? "steelblue" : "red");
+      
+    svg.selectAll(".label")
+      .data(data)
+      .join("text")
+      .attr("class", "label")
+      .attr("x", (d) => x(d.label) + x.bandwidth() / 2)
+      .attr("y", (d) => y(d.value) - 5)
+      .attr("text-anchor", "middle")
+      .text((d) => d.value.toFixed(2));
+  }
+  $: {
+      if ($ageLevel !== undefined && $educationLevel !== undefined) {
+        updateWagesAndDrawChart();
+      }
     }
+  
   </script>
   
-  <h2>Predicted Hourly Wage for 16 Years of Education</h2>
-  <h3>We are going to assume that the term "Black" also includes all its correspoding interaction terms with other covarites</h3>
-
+  <h2>Predicted Hourly Wage Based on Age and Education</h2>
   <div>
     <label for="ageLevel">Age:</label>
-    <input type="number" bind:value={$ageLevel} min="18" id="ageLevel" placeholder="Change the age here" />
+    <input type="number" bind:value={$ageLevel} min="18" id="ageLevel" placeholder="Enter age here" />
   </div>
-
-  <h2>Predicted Hourly Wage</h2>
-  <div id="wageWhiteEq_AE"></div>
+  <div>
+    <label for="educationLevel">Years of Education:</label>
+    <input type="number" bind:value={$educationLevel} min="0" id="educationLevel" placeholder="Enter education years here" />
+  </div>
   <br>
-  <div id="wageBlackEq_AE"></div>
-  <p>For a White individual with 16 years of education and age {$ageLevel}: ${predictedWageWhite.toFixed(2)}</p >
-  <p>For a Black individual with 16 years of education and age {$ageLevel}: ${predictedWageBlack.toFixed(2)}</p >
-
-  <div class="svg-container_AE">
-    <svg id="chart_AE"></svg>
+  <div id="wageWhiteEq_AET"></div>
+  <br>
+  <div id="wageBlackEq_AET"></div>
+  <p>For a White individual with {$educationLevel} years of education and age {$ageLevel}: ${predictedWageWhite.toFixed(2)}</p >
+  <p>For a Black individual with {$educationLevel} years of education and age {$ageLevel}: ${predictedWageBlack.toFixed(2)}</p >
+  <div class="svg-container_AET">
+    <svg id="chart_AET"></svg>
   </div>
-
   <style>
     input, label {
       font-family: Arial, sans-serif;
       margin: 5px 0;
-      font-size: 24px;
+      font-size: 24px;;
     }
-    #chart_AE {
+    #chart_AET {
       display: block;
       margin: auto;
     }

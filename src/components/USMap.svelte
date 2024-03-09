@@ -102,7 +102,7 @@
   });
   let isVisible = false;
 
-    $: if (index === 5) {
+    $: if (index === 6) {
         isVisible = true;
     } else {
         isVisible = false;
@@ -129,4 +129,4 @@
     }
   </style>
 
-<div class="map-container"></div>
+<div class="map-container" class:visible={isVisible}></div>
