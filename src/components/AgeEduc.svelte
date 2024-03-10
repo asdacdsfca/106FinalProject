@@ -9,22 +9,21 @@
     let outjsonData = writable([]);
     let ageLevel = writable(); // Use writable store for age
     let educationLevel = writable(); // Add writable store for education level
-    let intercept = 33.1752;
-    let coef_educ = 3.4556;
-    let coef_race_black = -8.7201 ;
-    let coef_educ_race_black = -1.7284;
-    let coef_age = 0.2938;
-    let coef_age_educ = 0.0101;
+    let intercept = 27.2188;
+    let coef_educ = 1.3843;
+    let coef_race_black = -3.6740 ;
+    let coef_educ_race_black = -0.2437;
+    let coef_age = 0.1460;
 
     let predictedWageWhite, predictedWageBlack;
   
     // Updated function to calculate predicted hourly wage, considering fixed education level
     function predictWageWhite(age, education) {
-      return intercept + coef_educ * education + coef_age * age + coef_age_educ * age * education;
+      return intercept + coef_educ * education + coef_age * age;
     }
   
     function predictWageBlack(age, education) {
-      return intercept + coef_educ * education + coef_race_black + coef_educ_race_black * education + coef_age * age + coef_age_educ * age * education;
+      return intercept + coef_educ * education + coef_race_black + coef_educ_race_black * education + coef_age * age;
     }
 
     $: predictedWageWhite = predictWageWhite($ageLevel, $educationLevel);
@@ -42,7 +41,7 @@
       (${coef_educ.toFixed(2)} \\times Education)  + 
       (${coef_race_black.toFixed(2)} \\times Black) + 
       (${coef_educ_race_black.toFixed(2)} \\times Education \\times Black) + 
-      (${coef_age.toFixed(2)} \\times Age) + (${coef_age_educ.toFixed(2)} \\times Age * Education)`, document.getElementById('wageBlackEq_AET'), options);
+      (${coef_age.toFixed(2)} \\times Age)`, document.getElementById('wageBlackEq_AET'), options);
   
     }
 

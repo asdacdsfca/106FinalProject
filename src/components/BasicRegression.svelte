@@ -5,13 +5,10 @@
   import { base } from '$app/paths';
 
   let outjsonData = writable([]);
-  let filteredData = [];
-  let ageSelected = writable(25); // Default value
-  let educSelected = writable(10); // Default value
-  let intercept = 33.2258; // Placeholder for intercept from the model
-  let coef_educ = 3.6208; // Placeholder for education coefficient from the model
-  let coef_race_black = -8.8936; // Placeholder for race (Black) coefficient from the model
-  let coef_educ_race_black = -1.7476 ;
+  let intercept = 27.2222; // Placeholder for intercept from the model
+  let coef_educ = 1.4159; // Placeholder for education coefficient from the model
+  let coef_race_black = -3.7059; // Placeholder for race (Black) coefficient from the model
+  let coef_educ_race_black = -0.2296;
 
 
 

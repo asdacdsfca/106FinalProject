@@ -10,15 +10,30 @@
     import Bread from "./Bread.svelte";
     import AgeEduc from './AgeEduc.svelte';
     import AgeEducRegion from './AgeEducRegion.svelte';
+    import AgeSq from './AgeSq.svelte';
 
   let count, index, offset, progress;
   let canNavigateToAgeEduc = false;
+  let canNavigateToAgeSq = false;
+  let canNavigateToAgeEducRegion = false;
   let showIncorrectChoiceMessage = false;
 
-  function navigateToNextSection() {
+  function navigateToAgeEduc() {
     canNavigateToAgeEduc = true;
     showIncorrectChoiceMessage = false; // Reset the message display
   }
+
+  function navigateToAgeSq() {
+    canNavigateToAgeSq = true;
+    showIncorrectChoiceMessage = false; // Reset the message display
+  }
+
+  function navigateToAgeEducRegion() {
+    canNavigateToAgeEducRegion = true;
+    showIncorrectChoiceMessage = false; // Reset the message display
+  }
+
+
 
   function handleIncorrectChoice() {
     showIncorrectChoiceMessage = true;
@@ -75,34 +90,49 @@
       {#if index === 4 || canNavigateToAgeEduc}
         <BasicRegression {index} />
         <div class="button-container">
-        <button on:click={navigateToNextSection}>Go to Next Section</button>
+        <button on:click={navigateToAgeEduc}>Go to Next Section</button>
         <button on:click={handleIncorrectChoice}>Incorrect Choice</button>
-      </div>
-        {#if showIncorrectChoiceMessage}
-          <p class="error-message">This is not the correct choice. Please try again.</p>
+        </div>
+          {#if showIncorrectChoiceMessage}
+            <p class="error-message">This is not the correct choice. Please try again.</p>
+          {/if}
         {/if}
-      {/if}
     </section>
 
     <section>
       {#if canNavigateToAgeEduc}
-      <AgeEduc {index} />
+        <AgeEduc/>
+        <div class="button-container">
+          <button on:click={navigateToAgeSq}>Go to Next Section</button>
+          <button on:click={handleIncorrectChoice}>Incorrect Choice</button>
+          </div>
+            {#if showIncorrectChoiceMessage}
+              <p class="error-message">This is not the correct choice. Please try again.</p>
+            {/if}
       {/if}
     </section>
 
     <section>
-      <AgeEducRegion />
+      {#if canNavigateToAgeSq}
+        <AgeSq/>
+        <div class="button-container">
+          <button on:click={navigateToAgeEducRegion}>Go to Next Section</button>
+          <button on:click={handleIncorrectChoice}>Incorrect Choice</button>
+          </div>
+            {#if showIncorrectChoiceMessage}
+              <p class="error-message">This is not the correct choice. Please try again.</p>
+            {/if}
+      {/if}
     </section>
 
     <section>
-      <USMap {index} />
+        <AgeEducRegion />
     </section>
+
   </div>
 </Scroller>
 
 <style>
-  
-
   .progress-bars {
     position: absolute;
     background: rgba(170, 51, 120, 0.2) /*  40% opaque */;

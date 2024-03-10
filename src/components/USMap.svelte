@@ -1,15 +1,6 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    export let index;
-
-    let isVisible = false;
-
-    $: if (index === 6) {
-        isVisible = true;
-    } else {
-        isVisible = false;
-    }
   
     onMount(() => {
       const width = 960, height = 600;
@@ -142,18 +133,13 @@
 .map-container svg { width: 100%; max-width: 960px; height: auto; }
 .region-group:hover { fill: #aaaaaa; }
 .region-group.hover path { fill: #aaaaaa; }
-.map-container{
+.map-container {
     width: 100%;
-    height: 100vh;
-    position: absolute;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 2s, visibility 2s;
-}
-.map-container.visible {
+    height: auto; /* Adjusted to not enforce full viewport height */
     opacity: 1;
     visibility: visible;
-}
+    transition: opacity 2s, visibility 2s;
+  }
   </style>
 
-<div class="map-container" class:visible={isVisible}></div>
+<div class="map-container"></div>
